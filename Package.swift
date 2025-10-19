@@ -79,6 +79,7 @@ let package = Package(
                 .unsafeFlags(["-suppress-warnings"]),
             ],
             linkerSettings: [
+                .linkedLibrary("resolv", .when(platforms: [.macOS])),
                 .linkedLibrary("z", .when(platforms: [.linux]))
             ]
         )
