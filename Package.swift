@@ -8,7 +8,10 @@ let package = Package(
     ],
     products: [
         .library(name: "MongoSwift", targets: ["MongoSwift"]),
-        .library(name: "MongoSwiftSync", targets: ["MongoSwiftSync"])
+        .library(name: "MongoSwiftSync", targets: ["MongoSwiftSync"]),
+
+        .library(name: "MongoSwiftStatic", type: .static, targets: ["MongoSwift"]),
+        .library(name: "MongoSwiftSyncStatic", type: .static, targets: ["MongoSwiftSync"]),
     ],
     dependencies: [
         .package(url: "https://github.com/Quick/Nimble", .upToNextMajor(from: "8.0.0")),
@@ -76,9 +79,6 @@ let package = Package(
                 .unsafeFlags(["-suppress-warnings"]),
             ],
             linkerSettings: [
-                .linkedLibrary("resolv"),
-                .linkedLibrary("ssl", .when(platforms: [.linux])),
-                .linkedLibrary("crypto", .when(platforms: [.linux])),
                 .linkedLibrary("z", .when(platforms: [.linux]))
             ]
         )
