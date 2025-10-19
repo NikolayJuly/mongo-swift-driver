@@ -28,8 +28,8 @@
 
 /* Defines introduced by `Package.swift` */
 #ifdef __APPLE__
-#  define MONGOC_ENABLE_SSL_SECURE_TRANSPORT 1
-#  define MONGOC_ENABLE_CRYPTO_COMMON_CRYPTO 1
+#  define MONGOC_ENABLE_SSL_SECURE_TRANSPORT 0
+#  define MONGOC_ENABLE_CRYPTO_COMMON_CRYPTO 0
 #  define MONGOC_ENABLE_CRYPTO_LIBCRYPTO 0
 #  define MONGOC_ENABLE_SSL_OPENSSL 0
 #  define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0
@@ -37,13 +37,34 @@
 #else
 #  define MONGOC_ENABLE_CRYPTO_COMMON_CRYPTO 0
 #  define MONGOC_ENABLE_SSL_SECURE_TRANSPORT 0
-#  define MONGOC_ENABLE_CRYPTO_LIBCRYPTO 1
-#  define MONGOC_ENABLE_SSL_OPENSSL 1
-#  if OPENSSL_VERSION_NUMBER < 0x10100000L
-#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0 
-#  else
-#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 1 
-#  endif
+#  define MONGOC_ENABLE_CRYPTO_LIBCRYPTO 0
+#  define MONGOC_ENABLE_SSL_OPENSSL 0
+#  define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0
+//#  if OPENSSL_VERSION_NUMBER < 0x10100000L
+//#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0
+//#  else
+//#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 1 
+//#  endif
+#endif
+
+#if defined(__APPLE__)
+    #define MONGOC_HAVE_RES_NDESTROY 1
+    #define MONGOC_HAVE_RES_NSEARCH 1
+    #define MONGOC_HAVE_RES_NCLOSE 1
+    #define MONGOC_HAVE_RES_SEARCH 0
+#elif defined(__linux__) && defined(__GLIBC__)
+    #define MONGOC_HAVE_RES_NDESTROY 1
+    #define MONGOC_HAVE_RES_NSEARCH 1
+    #define MONGOC_HAVE_RES_NCLOSE 1
+    #define MONGOC_HAVE_RES_SEARCH 0
+#elif defined(__linux__)
+    // musl (no __GLIBC__)
+    #define MONGOC_HAVE_RES_NDESTROY 0
+    #define MONGOC_HAVE_RES_NSEARCH 0
+    #define MONGOC_HAVE_RES_NCLOSE 0
+    #define MONGOC_HAVE_RES_SEARCH 1
+#else
+#error "Unsupported platform"
 #endif
 
 /*
@@ -119,7 +140,7 @@
  * MONGOC_ENABLE_SSL is set from configure to determine if we are
  * compiled with any SSL support.
  */
-#define MONGOC_ENABLE_SSL 1
+#define MONGOC_ENABLE_SSL 0
 
 #if MONGOC_ENABLE_SSL != 1
 #  undef MONGOC_ENABLE_SSL
@@ -130,7 +151,7 @@
  * MONGOC_ENABLE_CRYPTO is set from configure to determine if we are
  * compiled with any crypto support.
  */
-#define MONGOC_ENABLE_CRYPTO 1
+#define MONGOC_ENABLE_CRYPTO 0
 
 #if MONGOC_ENABLE_CRYPTO != 1
 #  undef MONGOC_ENABLE_CRYPTO
@@ -235,7 +256,9 @@
  * MONGOC_HAVE_RES_NSEARCH is set from configure to determine if we
  * have thread-safe res_nsearch().
  */
-#define MONGOC_HAVE_RES_NSEARCH 1
+#ifndef MONGOC_HAVE_RES_NSEARCH
+    #define MONGOC_HAVE_RES_NSEARCH 1
+#endif
 
 #if MONGOC_HAVE_RES_NSEARCH != 1
 #  undef MONGOC_HAVE_RES_NSEARCH
@@ -250,12 +273,13 @@
 #  undef MONGOC_HAVE_RES_NDESTROY
 #endif
 
-
 /*
  * MONGOC_HAVE_RES_NCLOSE is set from configure to determine if we
  * have Linux's res_nclose().
  */
-#define MONGOC_HAVE_RES_NCLOSE 1
+#ifndef MONGOC_HAVE_RES_NCLOSE
+    #define MONGOC_HAVE_RES_NCLOSE 1
+#endif
 
 #if MONGOC_HAVE_RES_NCLOSE != 1
 #  undef MONGOC_HAVE_RES_NCLOSE
@@ -267,12 +291,13 @@
  * have thread-unsafe res_search(). It's unset if we have the preferred
  * res_nsearch().
  */
-#define MONGOC_HAVE_RES_SEARCH 0
+#ifndef MONGOC_HAVE_RES_SEARCH
+    #define MONGOC_HAVE_RES_SEARCH 0
+#endif
 
 #if MONGOC_HAVE_RES_SEARCH != 1
 #  undef MONGOC_HAVE_RES_SEARCH
 #endif
-
 
 /*
  * Set from configure, see

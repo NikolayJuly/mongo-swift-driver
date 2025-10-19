@@ -21,6 +21,9 @@ let package = Package(
             dependencies: [
                 "MongoSwift",
                 .product(name: "NIOPosix", package: "swift-nio"),
+            ],
+            swiftSettings: [
+                .unsafeFlags(["-suppress-warnings"]),
             ]
         ),
         .target(name: "AtlasConnectivity", dependencies: ["MongoSwiftSync"]),
@@ -64,6 +67,14 @@ let package = Package(
         .target(
             name: "CLibMongoC",
             dependencies: [],
+            cSettings: [
+                .unsafeFlags(["-Wno-format"]),
+                .unsafeFlags(["-Wno-shorten-64-to-32"]),
+                .unsafeFlags(["-Wno-implicit-int-conversion"]),
+            ],
+            swiftSettings: [
+                .unsafeFlags(["-suppress-warnings"]),
+            ],
             linkerSettings: [
                 .linkedLibrary("resolv"),
                 .linkedLibrary("ssl", .when(platforms: [.linux])),
@@ -86,6 +97,9 @@ package.targets += [
             .product(name: "NIOCore", package: "swift-nio"),
             .product(name: "NIOPosix", package: "swift-nio"),
             .product(name: "SwiftBSON", package: "swift-bson")
+        ],
+        swiftSettings: [
+            .unsafeFlags(["-suppress-warnings"]),
         ]
     )
 ]
@@ -99,6 +113,9 @@ package.targets += [
             .product(name: "NIOCore", package: "swift-nio"),
             .product(name: "NIOPosix", package: "swift-nio"),
             .product(name: "SwiftBSON", package: "swift-bson")
+        ],
+        swiftSettings: [
+            .unsafeFlags(["-suppress-warnings"]),
         ]
     )
 ]

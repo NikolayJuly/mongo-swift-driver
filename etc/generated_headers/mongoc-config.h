@@ -28,22 +28,23 @@
 
 /* Defines introduced by `Package.swift` */
 #ifdef __APPLE__
-#  define MONGOC_ENABLE_SSL_SECURE_TRANSPORT 1
-#  define MONGOC_ENABLE_CRYPTO_COMMON_CRYPTO 1
+#  define MONGOC_ENABLE_SSL_SECURE_TRANSPORT 0
+#  define MONGOC_ENABLE_CRYPTO_COMMON_CRYPTO 0
 #  define MONGOC_ENABLE_CRYPTO_LIBCRYPTO 0
 #  define MONGOC_ENABLE_SSL_OPENSSL 0
 #  define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0
-#  define MONGOC_HAVE_RES_NDESTROY 1
+#  define MONGOC_HAVE_RES_NDESTROY 0
 #else
 #  define MONGOC_ENABLE_CRYPTO_COMMON_CRYPTO 0
 #  define MONGOC_ENABLE_SSL_SECURE_TRANSPORT 0
-#  define MONGOC_ENABLE_CRYPTO_LIBCRYPTO 1
-#  define MONGOC_ENABLE_SSL_OPENSSL 1
-#  if OPENSSL_VERSION_NUMBER < 0x10100000L
-#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0 
-#  else
-#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 1 
-#  endif
+#  define MONGOC_ENABLE_CRYPTO_LIBCRYPTO 0
+#  define MONGOC_ENABLE_SSL_OPENSSL 0
+#  define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0
+//#  if OPENSSL_VERSION_NUMBER < 0x10100000L
+//#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 0 
+//#  else
+//#    define MONGOC_HAVE_ASN1_STRING_GET0_DATA 1 
+//#  endif
 #endif
 
 /*
@@ -119,7 +120,7 @@
  * MONGOC_ENABLE_SSL is set from configure to determine if we are
  * compiled with any SSL support.
  */
-#define MONGOC_ENABLE_SSL 1
+#define MONGOC_ENABLE_SSL 0
 
 #if MONGOC_ENABLE_SSL != 1
 #  undef MONGOC_ENABLE_SSL
@@ -130,7 +131,7 @@
  * MONGOC_ENABLE_CRYPTO is set from configure to determine if we are
  * compiled with any crypto support.
  */
-#define MONGOC_ENABLE_CRYPTO 1
+#define MONGOC_ENABLE_CRYPTO 0
 
 #if MONGOC_ENABLE_CRYPTO != 1
 #  undef MONGOC_ENABLE_CRYPTO
